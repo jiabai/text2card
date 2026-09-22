@@ -131,7 +131,19 @@ div  相对定位 · 纵向 flex · 两端对齐 · overflow hidden · aspect-ra
 
 ### 文本与 UI
 
-5. Skyline 的原生 `input` 会把换行符渲染成方块，所以段落文本载入时要把段内硬换行压平成空格（`pages/index/index.js` 的 `normalize`）。这与卡片呈现一致。
+5. **Skyline 下 `\n` 一定会被画成一个方块，`input` / `textarea` / `text` 全都一样，没有 CSS 解。** 所以正文目前只能用「一段一个单行 input」，载入时把段内硬换行压平成空格（`pages/index/index.js` 的 `normalize`），与卡片按换行分段的呈现保持一致。
+
+   2026-09-23 做过一组控制变量实验（同一份内容，只改「有无换行」和渲染器）：
+
+   | 内容 | Skyline | WebView |
+   |---|---|---|
+   | 中文 · 无换行 | 正常 | 正常 |
+   | 中文 · 含换行 | **全变 □** | 正常两行 |
+   | 英文 · 含换行 | **`Line one□Line two`** | 正常两行 |
+
+   英文组最干净：文字正常，**只有换行处多出一个 □**。可见不是字体缺字形，而是 Skyline 把 `\n` 当成有字形的字符画了出来（WebView 会静默忽略控制字符）；中文则多一层放大——只要含 `\n`，整个节点字体就回退到不含中文字形的字体，整段全 □。`white-space` 的 `pre-wrap` / `pre-line` / `pre` 三个取值实测全部无效。
+
+   **真要做多行编辑器，唯一的路是页面级 renderer 混用**：写作页单独配 `"renderer": "webview"`，出图页保持 skyline（`<snapshot>` 只在 skyline 有），两步流程相应拆成两个页面、跨页用 `globalData` 传稿。已实测可行（webview 页 `navigateTo` skyline 页正常），本次没做，留作以后的选项。
 6. Skyline 的文本引擎会从英文单词中间断行，`word-break` / `overflow-wrap` 全部无效。解法是每个单位单独包成行内块，换行只发生在单位之间。
 7. **断行的单位不能只按空白切。** 中文句子没有空格，`split(/\s+/)` 会把整句切成**一个**行内块 —— 永不换行、直接撑破卡片。正确做法是英文整词成块、CJK 逐字成块，空格记在前一个单位上（`utils/tokens.js`）。文案库全是英文，所以这个坑不会在默认路径上自己暴露，只有用户输入中文时才炸。
 8. `border-box` 盒模型下给顶栏写死 `height` 再叠动态 `padding-top`，内容区会被吃光，看起来像顶栏消失。顶栏不要写死高度。
