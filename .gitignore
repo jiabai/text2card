@@ -38,3 +38,9 @@ next-env.d.ts
 # IDE
 .idea
 .history
+
+# 项目记忆与工作区数据
+.workbuddy/
+
+# 出图与测试产物
+test-results/
