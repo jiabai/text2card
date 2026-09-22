@@ -1,0 +1,8 @@
+# 微信开发者工具的个人私有配置，不入库
+project.private.config.json
+
+# 出图样例、模拟器截图、预览二维码等临时产物
+test-results/
+
+# 依赖
+node_modules/

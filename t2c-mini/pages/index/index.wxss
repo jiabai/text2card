@@ -1,0 +1,508 @@
+/*
+  朱砂暖纸。整套只有六个色：
+    纸 #F6F4F0 / 白 #FFFFFF / 墨 #17171A / 淡墨 #5C5852 / 灰字 #8A8681 / 朱砂 #C2402D
+  朱砂只用在两处——步骤序号和主按钮。别处一律不用，否则整页就散了。
+  层次全靠字重、字号和留白拉，不靠描边和阴影。
+*/
+
+.root {
+  width: 100%;
+  height: 100vh;
+}
+
+/*
+  Skyline 里 position: fixed 不可靠（实测底栏整个不渲染），
+  所以整页用 flex 纵向排：scroll-view 吃掉剩余高度，dock 走正常文档流。
+  副作用是好的——成品面板一出现，滚动区自动变矮，不用手算偏移量。
+*/
+.step {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  box-sizing: border-box;
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 0;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 8px;
+  background-color: #f6f4f0;
+}
+
+/*
+  离屏导出舞台。不能用 display:none / visibility:hidden，
+  那样 snapshot 拿不到真实布局，只能移出可视区。
+*/
+.export-stage {
+  position: absolute;
+  left: -99999px;
+  top: 0;
+}
+
+/* ---------- 页头：序号 + 衬线标题 ---------- */
+
+.status-bg {
+  flex-shrink: 0;
+  background-color: #f6f4f0;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+/* 44px = 微信胶囊按钮高度。这一行只为在右上角让出胶囊位，内容一律靠左。 */
+.nav-row {
+  height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.step-no-inline {
+  margin-left: 12px;
+}
+
+.step-no {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #c2402d;
+}
+
+/* 标题用衬线，跟正文的无衬线拉开距离。中文会落到宋体，正好是「文字卡片」该有的味道。 */
+.title {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, "Songti SC", "Noto Serif CJK SC", serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #17171a;
+  letter-spacing: 0.01em;
+}
+
+.lede {
+  font-size: 12px;
+  color: #8a8681;
+  margin-top: 6px;
+}
+
+.back {
+  height: 30px;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-left: -12px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-text {
+  font-size: 13px;
+  color: #8a8681;
+}
+
+/* ---------- 区块 ---------- */
+
+.block {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.label-side {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.label {
+  font-size: 12px;
+  color: #8a8681;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.label-row .label {
+  margin-bottom: 0;
+}
+
+.count {
+  font-size: 11px;
+  color: #b4ada5;
+  margin-left: 10px;
+}
+
+.mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-text {
+  font-size: 12px;
+  color: #8a8681;
+}
+
+.mini-center {
+  align-self: center;
+  margin-top: 2px;
+}
+
+/* ---------- 输入 ---------- */
+
+.para-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.para-input {
+  box-sizing: border-box;
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 44px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: 15px;
+  color: #17171a;
+}
+
+.para-del {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-left: 8px;
+  border-radius: 999px;
+  background-color: #e7e2db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.para-del-text {
+  font-size: 16px;
+  color: #8a8681;
+}
+
+.add {
+  align-self: flex-start;
+  height: 34px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 8px;
+  background-color: #e7e2db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-text {
+  font-size: 13px;
+  color: #5c5852;
+}
+
+.field {
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: 15px;
+  color: #17171a;
+}
+
+.ph {
+  color: #b4ada5;
+}
+
+/* ---------- 灵感：分类 + 换一句 ---------- */
+
+.tabs {
+  width: 100%;
+  height: 40px;
+}
+
+.tabs-inner {
+  display: flex;
+  flex-direction: row;
+}
+
+.tab {
+  flex-shrink: 0;
+  height: 32px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-on {
+  background-color: #17171a;
+}
+
+.tab-text {
+  font-size: 13px;
+  color: #5c5852;
+}
+
+.tab-text-on {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.ghost {
+  align-self: flex-start;
+  height: 34px;
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-top: 10px;
+  border-radius: 999px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ded8d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ghost-text {
+  font-size: 13px;
+  color: #5c5852;
+}
+
+/* ---------- 第二步：预览 ---------- */
+
+.preview-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* ---------- 格式：三段式 ---------- */
+
+.seg {
+  display: flex;
+  flex-direction: row;
+  background-color: #e7e2db;
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.seg-item {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seg-on {
+  background-color: #17171a;
+}
+
+.seg-text {
+  font-size: 13px;
+  color: #5c5852;
+}
+
+.seg-text-on {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ---------- 版式：两列，每格用两道墨线示意排版 ---------- */
+
+.grid-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.opt {
+  box-sizing: border-box;
+  width: 48.5%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: transparent;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.opt-on {
+  border-color: #c2402d;
+}
+
+.opt-chip {
+  box-sizing: border-box;
+  width: 100%;
+  height: 46px;
+  border-radius: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.opt-line {
+  height: 3px;
+  border-radius: 2px;
+  margin-bottom: 5px;
+}
+
+.opt-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #17171a;
+}
+
+.opt-desc {
+  font-size: 11px;
+  color: #8a8681;
+  margin-top: 3px;
+}
+
+/* ---------- 底部 dock ---------- */
+
+.dock {
+  flex-shrink: 0;
+  background-color: #f6f4f0;
+}
+
+.bar {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 12px;
+  padding-bottom: 20px;
+}
+
+/* 带 home 指示条的机器上再加一截；不支持 env() 时会整条丢掉，上面的值兜住 */
+.bar {
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+.cta {
+  height: 50px;
+  border-radius: 14px;
+  background-color: #c2402d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-off {
+  background-color: #ded8d0;
+}
+
+.cta-line {
+  background-color: #ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ded8d0;
+}
+
+.cta-half {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.cta-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.cta-text-ink {
+  color: #17171a;
+}
+
+.cta-text-off {
+  color: #a49d95;
+}
+
+
+.action-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.action-row .cta-half:first-child {
+  margin-right: 10px;
+}
+
+/* ---------- 成品面板 ---------- */
+
+.sheet-panel {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 14px;
+  padding-bottom: 12px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-frame {
+  height: 190px;
+  border-radius: 10px;
+  background-color: #f6f4f0;
+  overflow: hidden;
+}
+
+.result-img {
+  width: 100%;
+  height: 190px;
+}
+
+.meta {
+  font-size: 12px;
+  color: #8a8681;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.error {
+  color: #b4372a;
+  text-align: left;
+}
+
+.tail {
+  height: 8px;
+}

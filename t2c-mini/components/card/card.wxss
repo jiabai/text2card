@@ -1,0 +1,114 @@
+/*
+  单层卡片。结构对齐线上新版 Text2Card：
+  card(relative, flex column, justify-between, overflow hidden)
+    -> 装饰层(absolute) + head + body(flex-grow) + foot
+
+  字体说明：线上版是纯系统字体栈（sans / serif / mono 三套），
+  没有任何 @font-face，所以这里不再内联自定义字体文件。
+  旧的明朝体子集（TTF base64 内联）已随本次改版移除。
+*/
+
+.card {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-style: solid;
+  /* 对应线上卡片的 shadow-2xl。
+     这条只影响 App 内预览（线上预览也一样有阴影），不会进导出图：
+     modern-screenshot 的画布是元素的矩形本身（getBoundingClientRect），
+     不为外阴影留边距，阴影整块被裁掉。已用「加阴影前后导出 md5 一致」实测过。 */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.date {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.body {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text {
+  width: 100%;
+}
+
+.line {
+  width: 100%;
+}
+
+/* 每个 token 一个行内块：换行只发生在 token 之间。
+   英文 token 是整词，间距由行内的 margin-right 补回来；
+   CJK token 是单字，margin-right 为 0（汉字之间不该有间距）。 */
+.word {
+  display: inline-block;
+}
+
+.foot {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.author {
+  flex-shrink: 0;
+  border-bottom-style: solid;
+}
+
+.mark {
+  flex-shrink: 0;
+}
+
+/* ---- 风格专属装饰 ---- */
+
+/* 杂志：右上角橙色光斑，对应 w-32 h-32 blur-3xl mix-blend-multiply */
+.decor-blob {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(64px);
+}
+
+/* 光韵：整幅 10% 白叠加 + 1px 磨砂 */
+.decor-veil {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+
+/* 极简：细圆环，描边跟随当前文字色 */
+.decor-ring {
+  flex-shrink: 0;
+  border-style: solid;
+  border-color: currentColor;
+  border-radius: 999px;
+  opacity: 0.2;
+}
+
+/* 午夜：亮绿圆点 */
+.decor-dot {
+  flex-shrink: 0;
+  border-radius: 999px;
+  background-color: #00bc7d;
+}
