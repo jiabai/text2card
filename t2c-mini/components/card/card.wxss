@@ -39,6 +39,10 @@
 .body {
   flex-grow: 1;
   flex-shrink: 1;
+  /* 防止正文把 body 自身撑高、把 foot 挤出卡片：
+     flex 子项默认 min-height:auto（随内容增长），必须显式归零 */
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,6 +50,9 @@
 
 .text {
   width: 100%;
+  /* 禁止被 flex 压缩：Skyline 会把超高的 .text 压到 body 高度，
+     布局盒失真，fitText 的测量就永远是"刚好放得下" */
+  flex-shrink: 0;
 }
 
 .line {

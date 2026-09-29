@@ -5,27 +5,7 @@
   所以下面所有文字一律写成 <text ...>文字</text>，一个都不换行。
 -->
 <view class="root">
-  <!--
-    离屏导出舞台。两条硬约束：
-    1. snapshot 必须在 scroll-view 之外，放进去了 takeSnapshot 不回调。
-    2. 宽度要跟着 exportSize 走，写死会让非正方形格式多出空白。
-    它在两步之外常驻，第二步出图时才被读取。
-  -->
-  <view class="export-stage" style="width:{{exportSize}}px;">
-    <snapshot id="cardSnap" mode="view">
-      <card
-        size="{{exportSize}}"
-        format="{{format}}"
-        content="{{content}}"
-        author="{{author}}"
-        date="{{date}}"
-        style="{{style}}"
-      />
-    </snapshot>
-  </view>
-
-  <!-- ========== 01 写 ========== -->
-  <view wx:if="{{step === 1}}" class="step">
+  <view class="step">
     <!-- 状态栏底色。不铺这一块，滚动时卡片会从时钟电池底下穿过去。 -->
     <view class="status-bg" style="height:{{statusBarHeight}}px;"></view>
     <scroll-view class="page" scroll-y>
@@ -100,98 +80,6 @@
     <view class="dock">
       <view class="bar">
         <view id="btnNext" class="cta {{canNext ? '' : 'cta-off'}}" bind:tap="onNext"><text class="cta-text {{canNext ? '' : 'cta-text-off'}}">{{nextLabel}}</text></view>
-      </view>
-    </view>
-  </view>
-
-  <!-- ========== 02 选 ========== -->
-  <view wx:else class="step">
-    <view class="status-bg" style="height:{{statusBarHeight}}px;"></view>
-    <scroll-view class="page" scroll-y>
-      <view class="head">
-        <view class="nav-row">
-          <view id="btnBack" class="back" bind:tap="onBack"><text class="back-text">‹ 上一步</text></view>
-          <text class="step-no step-no-inline">02 / 02 — 选</text>
-        </view>
-        <text class="title">挑一个版式</text>
-        <text class="lede">{{lede}}</text>
-      </view>
-
-      <view class="preview-card">
-        <card
-          size="{{previewSize}}"
-          format="{{format}}"
-          content="{{content}}"
-          author="{{author}}"
-          date="{{date}}"
-          style="{{style}}"
-        />
-      </view>
-
-      <view class="block">
-        <text class="label">格式</text>
-        <view class="seg">
-          <view
-            wx:for="{{formats}}"
-            wx:key="key"
-            id="fmt-{{item.key}}"
-            class="seg-item {{formatIndex === index ? 'seg-on' : ''}}"
-            data-index="{{index}}"
-            bind:tap="onFormat"
-          >
-            <text class="seg-text {{formatIndex === index ? 'seg-text-on' : ''}}">{{item.name}}</text>
-          </view>
-        </view>
-      </view>
-
-      <view class="block">
-        <text class="label">版式</text>
-        <view wx:for="{{styleRows}}" wx:for-item="row" wx:for-index="ri" wx:key="i" class="grid-row">
-          <view
-            wx:for="{{row.cells}}"
-            wx:for-item="cell"
-            wx:for-index="ci"
-            wx:key="index"
-            id="style-{{cell.index}}"
-            class="opt {{styleIndex === cell.index ? 'opt-on' : ''}}"
-            data-index="{{cell.index}}"
-            bind:tap="onStyle"
-          >
-            <view class="opt-chip" style="background-color:{{cell.chipBg}};background-image:{{cell.chipImage}};">
-              <view class="opt-line" style="background-color:{{cell.chipInk}};width:56%;"></view>
-              <view class="opt-line" style="background-color:{{cell.chipInk}};width:34%;opacity:0.5;"></view>
-            </view>
-            <text class="opt-name">{{cell.name}}</text>
-            <text class="opt-desc">{{cell.desc}}</text>
-          </view>
-        </view>
-      </view>
-
-      <view wx:if="{{errorMsg}}" class="block"><text class="meta error">{{errorMsg}}</text></view>
-
-      <view class="tail"></view>
-    </scroll-view>
-
-    <!--
-      成品面板与底栏放进同一个 dock，纵向排布。
-      分开各自 fixed 会互相压住（而且 Skyline 的 position: fixed 本身就不可靠），
-      这样排下来，面板一出现滚动区自动变矮，不用手算偏移量。
-    -->
-    <view class="dock">
-      <view wx:if="{{resultPath}}" class="sheet-panel">
-        <view class="result-frame">
-          <image class="result-img" src="{{resultPath}}" mode="aspectFit" />
-        </view>
-        <text class="meta">{{resultInfo}}</text>
-        <view id="btnCloseResult" class="mini mini-center" bind:tap="onCloseResult"><text class="mini-text">不合意，回去改</text></view>
-      </view>
-
-      <view class="bar">
-        <view wx:if="{{resultPath}}" class="action-row">
-          <view id="btnSave" class="cta cta-half" bind:tap="onSave"><text class="cta-text">保存到相册</text></view>
-          <view id="btnShare" class="cta cta-line cta-half" bind:tap="onShare"><text class="cta-text cta-text-ink">发给好友</text></view>
-        </view>
-        <view wx:else id="btnExport" class="cta {{busy ? 'cta-off' : ''}}" bind:tap="onExport"><text class="cta-text {{busy ? 'cta-text-off' : ''}}">{{exportLabel}}</text></view>
       </view>
     </view>
   </view>

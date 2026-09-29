@@ -1,0 +1,185 @@
+/* 选页专属样式。页面骨架 / 页头 / dock / cta 等公共样式在 app.wxss。 */
+
+/*
+  离屏导出舞台。不能用 display:none / visibility:hidden，
+  那样 snapshot 拿不到真实布局，只能移出可视区。
+*/
+.export-stage {
+  position: absolute;
+  left: -99999px;
+  top: 0;
+}
+
+.step-no-inline {
+  margin-left: 12px;
+}
+
+.mini-center {
+  align-self: center;
+  margin-top: 2px;
+}
+
+.back {
+  height: 30px;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-left: -12px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-text {
+  font-size: 13px;
+  color: #8a8681;
+}
+
+/* ---------- 预览 ---------- */
+
+.preview-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* ---------- 格式：三段式 ---------- */
+
+.seg {
+  display: flex;
+  flex-direction: row;
+  background-color: #e7e2db;
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.seg-item {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seg-on {
+  background-color: #17171a;
+}
+
+.seg-text {
+  font-size: 13px;
+  color: #5c5852;
+}
+
+.seg-text-on {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ---------- 版式托盘：dock 内横排，点选 + 按住横滑实时跟刷 ---------- */
+
+/* chip 自带左右 4px 外距，托盘左右 16px 内边距合成 20px 边距，与 .bar 对齐 */
+.tray {
+  display: flex;
+  flex-direction: row;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 4px;
+}
+
+.tray-chip {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 52px;
+  margin-left: 4px;
+  margin-right: 4px;
+  border-radius: 9px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tray-chip-on {
+  border-color: #c2402d;
+}
+
+.tray-line {
+  height: 3px;
+  border-radius: 2px;
+  margin-bottom: 5px;
+}
+
+/* ---------- 出图后的按钮变体 ---------- */
+
+.cta-line {
+  background-color: #ffffff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ded8d0;
+}
+
+.cta-half {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.cta-text-ink {
+  color: #17171a;
+}
+
+.action-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.action-row .cta-half:first-child {
+  margin-right: 10px;
+}
+
+/* ---------- 成品面板 ---------- */
+
+.sheet-panel {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 14px;
+  padding-bottom: 12px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-frame {
+  height: 190px;
+  border-radius: 10px;
+  background-color: #f6f4f0;
+  overflow: hidden;
+}
+
+.result-img {
+  width: 100%;
+  height: 190px;
+}
+
+.meta {
+  font-size: 12px;
+  color: #8a8681;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.error {
+  color: #b4372a;
+  text-align: left;
+}

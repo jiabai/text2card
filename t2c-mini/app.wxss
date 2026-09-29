@@ -1,3 +1,174 @@
+/*
+  全局公共样式（写页 index 与选页 pick 共用）。
+  朱砂暖纸。整套只有六个色：
+    纸 #F6F4F0 / 白 #FFFFFF / 墨 #17171A / 淡墨 #5C5852 / 灰字 #8A8681 / 朱砂 #C2402D
+  朱砂只用在两处——步骤序号和主按钮。别处一律不用，否则整页就散了。
+  层次全靠字重、字号和留白拉，不靠描边和阴影。
+*/
+
 page {
   background-color: #f6f4f0;
+}
+
+.root {
+  width: 100%;
+  height: 100vh;
+}
+
+/*
+  Skyline 里 position: fixed 不可靠（实测底栏整个不渲染），
+  所以整页用 flex 纵向排：scroll-view 吃掉剩余高度，dock 走正常文档流。
+  副作用是好的——成品面板一出现，滚动区自动变矮，不用手算偏移量。
+*/
+.step {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  box-sizing: border-box;
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 0;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 8px;
+  background-color: #f6f4f0;
+}
+
+/* ---------- 页头：序号 + 衬线标题 ---------- */
+
+.status-bg {
+  flex-shrink: 0;
+  background-color: #f6f4f0;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+/* 44px = 微信胶囊按钮高度。这一行只为在右上角让出胶囊位，内容一律靠左。 */
+.nav-row {
+  height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.step-no {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #c2402d;
+}
+
+/* 标题用衬线，跟正文的无衬线拉开距离。中文会落到宋体，正好是「文字卡片」该有的味道。 */
+.title {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, "Songti SC", "Noto Serif CJK SC", serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #17171a;
+  letter-spacing: 0.01em;
+}
+
+.lede {
+  font-size: 12px;
+  color: #8a8681;
+  margin-top: 6px;
+}
+
+/* ---------- 区块 ---------- */
+
+.block {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.label-side {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.label {
+  font-size: 12px;
+  color: #8a8681;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.label-row .label {
+  margin-bottom: 0;
+}
+
+.mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-text {
+  font-size: 12px;
+  color: #8a8681;
+}
+
+/* ---------- 底部 dock ---------- */
+
+.dock {
+  flex-shrink: 0;
+  background-color: #f6f4f0;
+}
+
+.bar {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 12px;
+  padding-bottom: 20px;
+}
+
+/* 带 home 指示条的机器上再加一截；不支持 env() 时会整条丢掉，上面的值兜住 */
+.bar {
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+.cta {
+  height: 50px;
+  border-radius: 14px;
+  background-color: #c2402d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-off {
+  background-color: #ded8d0;
+}
+
+.cta-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.cta-text-off {
+  color: #a49d95;
+}
+
+.tail {
+  height: 8px;
 }
