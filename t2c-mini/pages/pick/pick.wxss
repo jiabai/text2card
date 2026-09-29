@@ -14,11 +14,6 @@
   margin-left: 12px;
 }
 
-.mini-center {
-  align-self: center;
-  margin-top: 2px;
-}
-
 .back {
   height: 30px;
   padding-left: 12px;
@@ -119,58 +114,7 @@
   margin-bottom: 5px;
 }
 
-/* ---------- 出图后的按钮变体 ---------- */
-
-.cta-line {
-  background-color: #ffffff;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #ded8d0;
-}
-
-.cta-half {
-  flex-grow: 1;
-  flex-shrink: 1;
-}
-
-.cta-text-ink {
-  color: #17171a;
-}
-
-.action-row {
-  display: flex;
-  flex-direction: row;
-}
-
-.action-row .cta-half:first-child {
-  margin-right: 10px;
-}
-
-/* ---------- 成品面板 ---------- */
-
-.sheet-panel {
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 14px;
-  padding-bottom: 12px;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-}
-
-.result-frame {
-  height: 190px;
-  border-radius: 10px;
-  background-color: #f6f4f0;
-  overflow: hidden;
-}
-
-.result-img {
-  width: 100%;
-  height: 190px;
-}
+/* ---------- 错误提示 ---------- */
 
 .meta {
   font-size: 12px;

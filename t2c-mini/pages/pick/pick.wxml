@@ -70,10 +70,9 @@
     <!--
       版式托盘（小红书式底部拇指热区）：5 套刚好一屏放下，不需要滚动，
       所以整个托盘可以放心做「按住横滑实时跟刷」，不存在与滚动手势的冲突。
-      轻点 chip = 切换；按住左右滑 = 扫过即换预览。出成品图时隐藏，给面板让位。
+      轻点 chip = 切换；按住左右滑 = 扫过即换预览。
     -->
     <view
-      wx:if="{{!resultPath}}"
       id="styleTray"
       class="tray"
       bind:touchstart="onTrayTouch"
@@ -94,25 +93,12 @@
     </view>
 
     <!--
-      成品面板与底栏放进同一个 dock，纵向排布。
-      分开各自 fixed 会互相压住（而且 Skyline 的 position: fixed 本身就不可靠），
-      这样排下来，面板一出现滚动区自动变矮，不用手算偏移量。
+      dock：底栏只剩「发给朋友」。转发菜单由系统拉起、盖在整页之上，
+      关掉（发出/取消都算）直接回写页，本页没有成品面板。
     -->
     <view class="dock">
-      <view wx:if="{{resultPath}}" class="sheet-panel">
-        <view class="result-frame">
-          <image class="result-img" src="{{resultPath}}" mode="aspectFit" />
-        </view>
-        <text class="meta">{{resultInfo}}</text>
-        <view id="btnCloseResult" class="mini mini-center" bind:tap="onCloseResult"><text class="mini-text">不合意，回去改</text></view>
-      </view>
-
       <view class="bar">
-        <view wx:if="{{resultPath}}" class="action-row">
-          <view id="btnSave" class="cta cta-half" bind:tap="onSave"><text class="cta-text">保存到相册</text></view>
-          <view id="btnShare" class="cta cta-line cta-half" bind:tap="onShare"><text class="cta-text cta-text-ink">发给好友</text></view>
-        </view>
-        <view wx:else id="btnExport" class="cta {{busy ? 'cta-off' : ''}}" bind:tap="onExport"><text class="cta-text {{busy ? 'cta-text-off' : ''}}">{{exportLabel}}</text></view>
+        <view id="btnShareCta" class="cta {{busy ? 'cta-off' : ''}}" bind:tap="onShareCta"><text class="cta-text {{busy ? 'cta-text-off' : ''}}">{{exportLabel}}</text></view>
       </view>
     </view>
   </view>

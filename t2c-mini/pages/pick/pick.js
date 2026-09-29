@@ -63,11 +63,9 @@ Page({
     author: '',
     lede: '',
 
-    resultPath: '',
-    resultInfo: '',
     errorMsg: '',
     busy: false,
-    exportLabel: '生成图片'
+    exportLabel: '发给朋友'
   },
 
   onLoad() {
@@ -108,8 +106,9 @@ Page({
 
   // 返回写页（系统返回键 / 自定义上一步都会走到这里）。
   // 把成品文件删掉：本页随即销毁，留着只会堆本地存储。
+  // 成品路径记在实例字段 _lastExport（不再进 data：没有成品面板了）。
   onUnload() {
-    if (this.data.resultPath) EXPORTER.removeFile(this.data.resultPath);
+    if (this._lastExport) EXPORTER.removeFile(this._lastExport);
   },
 
   lede(count, formatName) {
@@ -161,46 +160,32 @@ Page({
   onStyle(e) {
     const i = Number(e.currentTarget.dataset.index);
     if (i === this.data.styleIndex) return;
-    // 换版式后上一张成品图已经对不上了，直接作废，免得保存错图
-    if (this.data.resultPath) EXPORTER.removeFile(this.data.resultPath);
-    this.setData({ styleIndex: i, style: STYLES.styles[i], resultPath: '', resultInfo: '' });
+    this.setData({ styleIndex: i, style: STYLES.styles[i] });
     this.syncPickState();
   },
 
   onFormat(e) {
     const i = Number(e.currentTarget.dataset.index);
     if (i === this.data.formatIndex) return;
-    if (this.data.resultPath) EXPORTER.removeFile(this.data.resultPath);
     this.setData({
       formatIndex: i,
       format: FORMATS[i].key,
       formatName: FORMATS[i].name,
-      lede: this.lede(this.data.content.replace(/\s/g, '').length, FORMATS[i].name),
-      resultPath: '',
-      resultInfo: ''
+      lede: this.lede(this.data.content.replace(/\s/g, '').length, FORMATS[i].name)
     });
     this.syncPickState();
   },
 
-  onCloseResult() {
-    if (this.data.resultPath) EXPORTER.removeFile(this.data.resultPath);
-    this.setData({ resultPath: '', resultInfo: '' });
-  },
-
-  onExport() {
+  // CTA「发给朋友」：生成图片后直接拉起转发菜单，一步到位。
+  // 菜单关掉（发出/取消都算）就回写页开始下一轮；只有真失败才留在本页提示。
+  onShareCta() {
     const self = this;
     if (self.data.busy) return;
 
     // 每次出图都落一个新文件，不清理会一直堆在本地存储里。只保留最新一张。
-    const stale = self.data.resultPath;
+    const stale = self._lastExport || '';
 
-    self.setData({
-      busy: true,
-      exportLabel: '生成中…',
-      errorMsg: '',
-      resultPath: '',
-      resultInfo: ''
-    });
+    self.setData({ busy: true, exportLabel: '生成中…', errorMsg: '' });
     wx.showLoading({ title: '生成中', mask: true });
 
     // 留一帧让 setData 落到布局上，快照取自离屏舞台
@@ -208,72 +193,39 @@ Page({
       EXPORTER.capture(self, '#cardSnap')
         .then((r) => {
           EXPORTER.removeFile(stale);
+          self._lastExport = r.path;
           wx.hideLoading();
-          self.setData({
-            busy: false,
-            exportLabel: '生成图片',
-            resultPath: r.path,
-            resultInfo:
-              r.width + ' × ' + r.height + ' px，约 ' + Math.round(r.bytes / 1024) + ' KB'
+          self.setData({ busy: false, exportLabel: '发给朋友' });
+          wx.showShareImageMenu({
+            path: r.path,
+            success() {
+              self.backAfterShare();
+            },
+            fail(err) {
+              // 用户反悔关掉菜单，和发出一样回写页；真失败才留在本页
+              const msg = (err && err.errMsg) || '';
+              if (msg.indexOf('cancel') >= 0) {
+                self.backAfterShare();
+              } else {
+                self.setData({ errorMsg: '转发失败：' + msg });
+              }
+            }
           });
         })
         .catch((err) => {
           wx.hideLoading();
           self.setData({
             busy: false,
-            exportLabel: '生成图片',
+            exportLabel: '发给朋友',
             errorMsg: (err && err.message) || String(err)
           });
         });
     }, 400);
   },
 
-  onSave() {
-    const self = this;
-    if (!self.data.resultPath) return;
-
-    // saveImageToPhotosAlbum 是隐私接口，先过隐私授权再调。
-    EXPORTER.ensurePrivacy()
-      .then(() => {
-        wx.saveImageToPhotosAlbum({
-          filePath: self.data.resultPath,
-          success() {
-            wx.showToast({ title: '已保存到相册' });
-          },
-          fail(err) {
-            const msg = (err && err.errMsg) || JSON.stringify(err);
-            // 用户拒绝过授权后，系统不再弹窗，只能引导去设置页
-            if (msg.indexOf('auth deny') >= 0 || msg.indexOf('auth denied') >= 0) {
-              wx.showModal({
-                title: '需要相册权限',
-                content: '保存图片要访问相册，是否去设置里打开？',
-                confirmText: '去设置',
-                success(res) {
-                  if (res.confirm) wx.openSetting({});
-                }
-              });
-              return;
-            }
-            self.setData({ errorMsg: '保存失败：' + msg });
-          }
-        });
-      })
-      .catch((err) => {
-        self.setData({ errorMsg: (err && err.message) || String(err) });
-      });
-  },
-
-  onShare() {
-    const self = this;
-    if (!self.data.resultPath) return;
-
-    wx.showShareImageMenu({
-      path: self.data.resultPath,
-      fail(err) {
-        self.setData({
-          errorMsg: '分享失败：' + ((err && err.errMsg) || JSON.stringify(err))
-        });
-      }
-    });
+  // 转发菜单关掉后的落点：不留成品面板，直接回写页（写页实例在栈里，正文原样保留）。
+  // 拆成独立方法：自动化可以用 callMethod 直接触发，验证回跳与文件清理。
+  backAfterShare() {
+    wx.navigateBack();
   }
 });
