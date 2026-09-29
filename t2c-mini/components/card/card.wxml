@@ -63,13 +63,8 @@
     </view>
   </view>
 
-  <!-- 底部：署名 + 固定水印 -->
+  <!-- 底部：只剩右下角固定水印 -->
   <view class="foot" style="margin-top:{{s.footGap}}px;">
-    <view
-      class="author"
-      style="font-family:{{s.authorFont}};font-size:{{s.authorSize}}px;font-weight:{{s.authorWeight}};color:{{s.authorColor}};letter-spacing:{{s.authorTracking}}em;opacity:{{s.authorOpacity}};background-color:{{s.authorChipBg}};padding-left:{{s.authorPadX}}px;padding-right:{{s.authorPadX}}px;padding-top:{{s.authorPadY}}px;padding-bottom:{{s.authorPadBottom}}px;border-bottom-width:{{s.authorUnderlineW}}px;border-bottom-color:{{s.authorUnderlineColor}};margin-bottom:{{s.authorMarginBottom}}px;"
-    >{{authorText}}</view>
-
     <view
       class="mark"
       style="font-family:{{s.markFont}};font-size:{{s.markSize}}px;letter-spacing:{{s.markTracking}}em;color:{{s.markColor}};opacity:{{s.markOpacity}};"

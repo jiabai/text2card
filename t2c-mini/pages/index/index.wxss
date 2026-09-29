@@ -1,76 +1,38 @@
 /* 写页专属样式。页面骨架 / 页头 / dock / cta 等公共样式在 app.wxss。 */
 
-.count {
-  font-size: 11px;
-  color: #b4ada5;
-  margin-left: 10px;
-}
-
-/* ---------- 段落输入 ---------- */
-
-.para-row {
+/* 本页没有 scroll-view：除了页头就是一个撑满剩余高度的输入框，
+   文字超出后在 textarea 内部滚动，不整页滚。 */
+.page {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 8px;
+  flex-direction: column;
 }
 
-.para-input {
+.head {
+  flex-shrink: 0;
+}
+
+/* ---------- 唯一的输入区：白色圆角卡片，对齐小红书文字编辑器 ---------- */
+
+.editor {
   box-sizing: border-box;
   flex-grow: 1;
   flex-shrink: 1;
-  height: 44px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   background-color: #ffffff;
-  border-radius: 10px;
-  padding-left: 12px;
-  padding-right: 12px;
-  font-size: 15px;
-  color: #17171a;
+  border-radius: 14px;
+  padding: 14px;
 }
 
-.para-del {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  margin-left: 8px;
-  border-radius: 999px;
-  background-color: #e7e2db;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.para-del-text {
-  font-size: 16px;
-  color: #8a8681;
-}
-
-.add {
-  align-self: flex-start;
-  height: 34px;
-  padding-left: 12px;
-  padding-right: 12px;
-  border-radius: 8px;
-  background-color: #e7e2db;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.add-text {
-  font-size: 13px;
-  color: #5c5852;
-}
-
-.field {
+.editor-input {
   box-sizing: border-box;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-height: 0;
   width: 100%;
-  height: 44px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding-left: 12px;
-  padding-right: 12px;
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.6;
   color: #17171a;
 }
 
@@ -78,61 +40,10 @@
   color: #b4ada5;
 }
 
-/* ---------- 灵感：分类 + 换一句 ---------- */
-
-.tabs {
-  width: 100%;
-  height: 40px;
-}
-
-.tabs-inner {
-  display: flex;
-  flex-direction: row;
-}
-
-.tab {
+.counter {
   flex-shrink: 0;
-  height: 32px;
-  padding-left: 14px;
-  padding-right: 14px;
-  margin-right: 8px;
-  border-radius: 999px;
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tab-on {
-  background-color: #17171a;
-}
-
-.tab-text {
-  font-size: 13px;
-  color: #5c5852;
-}
-
-.tab-text-on {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.ghost {
-  align-self: flex-start;
-  height: 34px;
-  padding-left: 14px;
-  padding-right: 14px;
-  margin-top: 10px;
-  border-radius: 999px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #ded8d0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ghost-text {
-  font-size: 13px;
-  color: #5c5852;
+  align-self: flex-end;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #b4ada5;
 }

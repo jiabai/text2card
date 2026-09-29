@@ -3,12 +3,15 @@
   实测（2026-09-23）：节点内容里只要带前后换行空白，Skyline 会把换行渲染成 □，
   并且整个节点改用不含中文字形的字体——中文全变豆腐块，英文毫无异常。
   所以下面所有文字一律写成 <text ...>文字</text>，一个都不换行。
+
+  本页 renderer 是 webview（见 index.json）：Skyline 会把 textarea 里的换行
+  画成方块（README 坑 5），多行输入只能放在 webview 页；选页 pick 保持 skyline。
 -->
 <view class="root">
   <view class="step">
     <!-- 状态栏底色。不铺这一块，滚动时卡片会从时钟电池底下穿过去。 -->
     <view class="status-bg" style="height:{{statusBarHeight}}px;"></view>
-    <scroll-view class="page" scroll-y>
+    <view class="page">
       <!--
         导航行固定 44px，高度等于微信胶囊按钮，用来把左侧内容与胶囊错开。
         少了这一行，右侧的步骤号会正好钻到胶囊底下。
@@ -19,63 +22,23 @@
         <text class="lede">版式留到下一步再挑。</text>
       </view>
 
-      <view class="block">
-        <view class="label-row">
-          <text class="label">正文</text>
-          <view class="label-side">
-            <view id="btnClear" class="mini" bind:tap="onClear"><text class="mini-text">清空</text></view>
-            <text class="count">{{charCount}} 字</text>
-          </view>
-        </view>
-        <view wx:for="{{paragraphs}}" wx:key="id" class="para-row">
-          <input
-            class="para-input"
-            value="{{item.text}}"
-            data-index="{{index}}"
-            bindinput="onParaInput"
-            maxlength="240"
-            placeholder="{{index === 0 ? '写一句话，或者一段话' : '再写一段'}}"
-            placeholder-class="ph"
-          />
-          <view wx:if="{{paragraphs.length > 1}}" class="para-del" data-index="{{index}}" bind:tap="onDelPara"><text class="para-del-text">×</text></view>
-        </view>
-        <view id="btnAddPara" class="add" bind:tap="onAddPara"><text class="add-text">+ 加一段</text></view>
-      </view>
-
-      <view class="block">
-        <text class="label">署名 · 选填</text>
-        <input
-          class="field"
-          value="{{author}}"
-          bindinput="onAuthor"
-          maxlength="40"
-          placeholder="留空则显示 Anonymous"
+      <!-- 对齐小红书「文字」编辑器：整页只有一个输入框，换行即分段。 -->
+      <view class="editor">
+        <textarea
+          class="editor-input"
+          value="{{text}}"
+          bindinput="onInput"
+          maxlength="{{maxLen}}"
+          placeholder="写点什么吧…"
           placeholder-class="ph"
+          show-confirm-bar="{{false}}"
+          adjust-position="{{true}}"
+          disable-default-padding="{{true}}"
+          cursor-spacing="20"
         />
+        <text class="counter">{{textLen}} / {{maxLen}}</text>
       </view>
-
-      <view class="block">
-        <text class="label">不知道写什么？挑一句现成的</text>
-        <scroll-view class="tabs" scroll-x>
-          <view class="tabs-inner">
-            <view
-              wx:for="{{categories}}"
-              wx:key="key"
-              id="tab-{{item.key}}"
-              class="tab {{catIndex === index ? 'tab-on' : ''}}"
-              data-index="{{index}}"
-              bind:tap="onCat"
-            >
-              <text class="tab-text {{catIndex === index ? 'tab-text-on' : ''}}">{{item.name}}</text>
-            </view>
-          </view>
-        </scroll-view>
-        <!-- 池子里只有一条时换不出新东西，点了没反应像坏了，直接不显示 -->
-        <view wx:if="{{canShuffle}}" id="btnShuffle" class="ghost" bind:tap="onShuffle"><text class="ghost-text">换一句</text></view>
-      </view>
-
-      <view class="tail"></view>
-    </scroll-view>
+    </view>
 
     <view class="dock">
       <view class="bar">

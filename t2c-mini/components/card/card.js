@@ -6,7 +6,7 @@
 //     ├ 装饰层  [editorial] 右上角光斑 / [gradient] 整幅白色叠加
 //     ├ head   flex justify-between items-start mb-8   → 日期 + (圆环|圆点)
 //     ├ body   flex-grow flex items-center             → 正文，垂直居中
-//     └ foot   mt-8 flex justify-between items-end     → 署名 + 固定水印
+//     └ foot   mt-8 flex justify-end items-end         → 固定水印 TEXT2CARD
 //
 // 尺寸策略：styles.js 里的数值都是网页 px（卡片宽 500 时的值），
 // 这里统一乘 k = 实际卡片宽 / 500，所以三种导出格式共用同一套数值，
@@ -56,7 +56,6 @@ Component({
     size: { type: Number, value: 1000 },
     format: { type: String, value: 'portrait' },
     content: { type: String, value: '' },
-    author: { type: String, value: '' },
     date: { type: String, value: '' },
     style: { type: Object, value: CFG.styles[0] }
   },
@@ -65,7 +64,6 @@ Component({
     s: {},
     lines: [],
     dateText: '',
-    authorText: '',
     markText: ''
   },
 
@@ -74,7 +72,7 @@ Component({
       this.recalc();
       this.syncText();
     },
-    'content, author, date': function () {
+    'content, date': function () {
       this.syncText();
     }
   },
@@ -131,22 +129,6 @@ Component({
           textTracking: st.textTracking || 0,
           wordGap: WORD_GAP,
 
-          authorFont: stacks[st.authorFont] || stacks.sans,
-          authorWeight: st.authorWeight,
-          authorSize: round(st.authorSize * k),
-          authorTracking: st.authorTracking || 0,
-          authorColor: st.authorColor || st.textColor,
-          authorOpacity: st.authorOpacity == null ? 1 : st.authorOpacity,
-          authorChip: !!st.authorChip,
-          authorChipBg: st.authorChipBg || 'transparent',
-          authorPadX: st.authorChip ? round((st.authorPadX || 0) * k) : 0,
-          authorPadY: st.authorChip ? round((st.authorPadY || 0) * k) : 0,
-          authorUnderline: !!st.authorUnderline,
-          authorUnderlineW: st.authorUnderline ? round(k) : 0,
-          authorUnderlineColor: st.authorUnderlineColor || 'transparent',
-          authorPadBottom: round((st.authorPadBottom || 0) * k),
-          authorMarginBottom: round((st.authorMarginBottom || 0) * k),
-
           dateFont: stacks[st.dateFont] || stacks.sans,
           dateSize: round(st.dateSize * k),
           dateColor: st.dateColor || st.textColor,
@@ -177,8 +159,6 @@ Component({
         {
           lines: TOKENS.buildLines(this.data.content),
           dateText: upper(this.data.date, st.dateUpper),
-          // 网页版是 children: a || "Anonymous"，空署名会显示 Anonymous
-          authorText: upper(this.data.author || 'Anonymous', st.authorUpper),
           markText: 'TEXT2CARD'
         },
         // 渲染完成后再测量，时序才确定（固定延时在 Skyline 上会撞重排竞态）

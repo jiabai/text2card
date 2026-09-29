@@ -6,7 +6,7 @@
 // 渲染时由 card.js 统一乘缩放系数 k = 卡片实际宽度 / 500，三种格式共用一套数值。
 //
 // 与旧版的区别：旧版一套「主题」只换 3 个颜色，这五套是版式风格，
-// 字体、字号、字重、字距、行高、底色、署名与日期的处理、装饰元素全都不同。
+// 字体、字号、字重、字距、行高、底色、日期的处理、装饰元素全都不同。
 
 // 网页版的字体栈原文（Tailwind 默认），照抄过来保证跨端一致。
 // 注意：线上版完全不用 web font，零 @font-face，全部走系统字体。
@@ -35,14 +35,6 @@ const styles = [
     textSize: 36,
     textLineHeight: 1.25,
     textTracking: 0,
-    // 署名 font-sans text-xs tracking-widest uppercase text-zinc-500
-    authorFont: 'sans',
-    authorWeight: 400,
-    authorSize: 12,
-    authorTracking: 0.1,
-    authorUpper: true,
-    authorColor: '#71717B', // text-zinc-500
-    authorOpacity: 1,
     // 日期 font-mono text-xs text-zinc-400
     dateFont: 'mono',
     dateSize: 12,
@@ -67,19 +59,6 @@ const styles = [
     textSize: 48,
     textLineHeight: 1.25,
     textTracking: -0.025,
-    // 署名 font-sans font-bold text-xs tracking-widest uppercase
-    //      border-b border-black/20 pb-1 mb-4 inline-block
-    authorFont: 'sans',
-    authorWeight: 700,
-    authorSize: 12,
-    authorTracking: 0.1,
-    authorUpper: true,
-    authorColor: '#1A1A1A',
-    authorOpacity: 1,
-    authorUnderline: true,
-    authorUnderlineColor: 'rgba(0,0,0,0.2)',
-    authorPadBottom: 4,
-    authorMarginBottom: 16,
     // 日期 font-sans text-[10px] uppercase tracking-widest opacity-60
     dateFont: 'sans',
     dateSize: 10,
@@ -104,18 +83,6 @@ const styles = [
     textSize: 48,
     textLineHeight: 1,
     textTracking: -0.05,
-    // 署名 font-mono text-xs bg-white text-[#FF4400] px-2 py-1 inline-block
-    authorFont: 'mono',
-    authorWeight: 400,
-    authorSize: 12,
-    authorTracking: 0,
-    authorUpper: false,
-    authorColor: '#FF4400',
-    authorOpacity: 1,
-    authorChip: true,
-    authorChipBg: '#FFFFFF',
-    authorPadX: 8,
-    authorPadY: 4,
     // 日期 font-mono text-xs opacity-80
     dateFont: 'mono',
     dateSize: 12,
@@ -140,14 +107,6 @@ const styles = [
     textSize: 36,
     textLineHeight: 1.1111,
     textTracking: 0.025,
-    // 署名 font-mono text-xs text-emerald-500
-    authorFont: 'mono',
-    authorWeight: 400,
-    authorSize: 12,
-    authorTracking: 0,
-    authorUpper: false,
-    authorColor: '#00BC7D', // text-emerald-500
-    authorOpacity: 1,
     // 日期 font-mono text-xs text-zinc-600
     dateFont: 'mono',
     dateSize: 12,
@@ -172,14 +131,6 @@ const styles = [
     textSize: 36,
     textLineHeight: 1.375,
     textTracking: 0,
-    // 署名 font-sans text-xs font-semibold tracking-wider opacity-80
-    authorFont: 'sans',
-    authorWeight: 600,
-    authorSize: 12,
-    authorTracking: 0.05,
-    authorUpper: false,
-    authorColor: '#18181B',
-    authorOpacity: 0.8,
     // 日期 font-sans text-[10px] opacity-60
     dateFont: 'sans',
     dateSize: 10,

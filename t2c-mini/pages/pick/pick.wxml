@@ -16,7 +16,6 @@
         size="{{exportSize}}"
         format="{{format}}"
         content="{{content}}"
-        author="{{author}}"
         date="{{date}}"
         style="{{style}}"
       />
@@ -40,7 +39,6 @@
           size="{{previewSize}}"
           format="{{format}}"
           content="{{content}}"
-          author="{{author}}"
           date="{{date}}"
           style="{{style}}"
         />

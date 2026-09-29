@@ -60,7 +60,6 @@ Page({
 
     date: '',
     content: '',
-    author: '',
     lede: '',
 
     errorMsg: '',
@@ -70,7 +69,7 @@ Page({
 
   onLoad() {
     const app = getApp();
-    const draft = (app.globalData && app.globalData.draft) || { content: '', author: '' };
+    const draft = (app.globalData && app.globalData.draft) || { content: '' };
     const saved = (app.globalData && app.globalData.pickState) || {};
     const styleIndex = saved.styleIndex || 0;
     const formatIndex = saved.formatIndex == null ? 1 : saved.formatIndex;
@@ -93,7 +92,6 @@ Page({
       date: todayText(),
 
       content: draft.content || '',
-      author: draft.author || '',
 
       styleIndex: styleIndex,
       style: STYLES.styles[styleIndex],
