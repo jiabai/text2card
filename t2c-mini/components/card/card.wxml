@@ -50,6 +50,7 @@
         wx:for-index="li"
         wx:key="i"
         class="line"
+        style="{{li ? 'margin-top:' + s.paraGap + 'px;' : ''}}"
       >
         <text
           wx:for="{{line.tokens}}"

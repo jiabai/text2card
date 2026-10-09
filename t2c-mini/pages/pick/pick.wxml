@@ -13,6 +13,7 @@
   <view class="export-stage" style="width:{{exportSize}}px;">
     <snapshot id="cardSnap" mode="view">
       <card
+        class="export-card"
         size="{{exportSize}}"
         format="{{format}}"
         content="{{content}}"
@@ -36,6 +37,7 @@
 
       <view class="preview-card">
         <card
+          class="preview-card-item"
           size="{{previewSize}}"
           format="{{format}}"
           content="{{content}}"

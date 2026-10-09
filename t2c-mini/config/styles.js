@@ -16,9 +16,10 @@ const stacks = {
   mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
 };
 
-// 备注：Tailwind 的 w-32 = 128px（不是 32px），已在 decor 尺寸里体现。
-// 正文行高：text-3xl 默认 2.25rem/1.875rem=1.2，text-4xl 默认 2.5rem/2.25rem≈1.1111，
-// 有 leading-* 类时以该类为准。
+// 五套卡片风格：底色 / 字色 / 装饰各自不同，正文与日期的字体字号排版
+// 统一复刻 flomo 分享图的笔记体（系统无衬线、18.4px、1.8 行高；卡宽 500 基准）。
+// 像素测量依据见 2026-10-02 对 flomo 分享图的采样（1230 宽画布 × 500/1230 换算）。
+// 字号用「整行墨迹宽 / 全宽字符数」反推（24 字 × 45.2px ≈ 1083px），已用短行交叉验证。
 const styles = [
   {
     id: 'minimal',
@@ -28,15 +29,15 @@ const styles = [
     bg: '#FFFFFF',
     borderColor: '#E4E4E7', // border-zinc-200
     textColor: '#18181B', // text-zinc-900
-    // 正文 font-serif text-4xl leading-tight italic
-    textFont: 'serif',
+    // 正文：复刻 flomo 笔记体（系统无衬线 / 常规字重 / 小字 / 1.8 行高）
+    textFont: 'sans',
     textWeight: 400,
-    textItalic: true,
-    textSize: 36,
-    textLineHeight: 1.25,
+    textItalic: false,
+    textSize: 18.4,
+    textLineHeight: 1.8,
     textTracking: 0,
-    // 日期 font-mono text-xs text-zinc-400
-    dateFont: 'mono',
+    // 日期与正文同族，小字浅灰
+    dateFont: 'sans',
     dateSize: 12,
     dateColor: '#9F9FA9', // text-zinc-400
     dateTracking: 0,
@@ -52,19 +53,19 @@ const styles = [
     bg: '#F5F2ED',
     borderColor: '',
     textColor: '#1A1A1A',
-    // 正文 font-serif text-5xl font-light leading-tight tracking-tight
-    textFont: 'serif',
-    textWeight: 300,
+    // 正文：flomo 笔记体（杂志风的个性交给米白纸面 + 橙色光斑）
+    textFont: 'sans',
+    textWeight: 400,
     textItalic: false,
-    textSize: 48,
-    textLineHeight: 1.25,
-    textTracking: -0.025,
-    // 日期 font-sans text-[10px] uppercase tracking-widest opacity-60
+    textSize: 18.4,
+    textLineHeight: 1.8,
+    textTracking: 0,
+    // 日期与正文同族，小字
     dateFont: 'sans',
-    dateSize: 10,
+    dateSize: 12,
     dateColor: '#1A1A1A',
-    dateTracking: 0.1,
-    dateUpper: true,
+    dateTracking: 0,
+    dateUpper: false,
     dateOpacity: 0.6,
     decor: 'blob', // 右上角 128×128 橙色光斑
     markWhite: false
@@ -76,15 +77,15 @@ const styles = [
     bg: '#FF4400',
     borderColor: '',
     textColor: '#FFFFFF',
-    // 正文 font-sans font-bold text-5xl tracking-tighter leading-none
+    // 正文：flomo 笔记体（大胆风的个性交给满版橙底白字，字重也收敛为常规）
     textFont: 'sans',
-    textWeight: 700,
+    textWeight: 400,
     textItalic: false,
-    textSize: 48,
-    textLineHeight: 1,
-    textTracking: -0.05,
-    // 日期 font-mono text-xs opacity-80
-    dateFont: 'mono',
+    textSize: 18.4,
+    textLineHeight: 1.8,
+    textTracking: 0,
+    // 日期与正文同族，小字
+    dateFont: 'sans',
     dateSize: 12,
     dateColor: '#FFFFFF',
     dateTracking: 0,
@@ -100,15 +101,15 @@ const styles = [
     bg: '#09090B', // bg-zinc-950
     borderColor: '#27272A', // border-zinc-800
     textColor: '#F4F4F5', // text-zinc-100
-    // 正文 font-sans font-light text-4xl tracking-wide（无 leading 类，用 text-4xl 默认行高）
+    // 正文：flomo 笔记体（午夜风的个性交给深黑纸面 + 亮绿圆点）
     textFont: 'sans',
-    textWeight: 300,
+    textWeight: 400,
     textItalic: false,
-    textSize: 36,
-    textLineHeight: 1.1111,
-    textTracking: 0.025,
-    // 日期 font-mono text-xs text-zinc-600
-    dateFont: 'mono',
+    textSize: 18.4,
+    textLineHeight: 1.8,
+    textTracking: 0,
+    // 日期与正文同族，小字
+    dateFont: 'sans',
     dateSize: 12,
     dateColor: '#52525C', // text-zinc-600
     dateTracking: 0,
@@ -124,16 +125,16 @@ const styles = [
     bg: 'linear-gradient(to bottom right, #FEE685, #FFA1AD, #A684FF)', // from-amber-200 via-rose-300 to-violet-400
     borderColor: '',
     textColor: '#18181B',
-    // 正文 font-serif text-4xl font-medium leading-snug
-    textFont: 'serif',
-    textWeight: 500,
+    // 正文：flomo 笔记体（光韵风的个性交给三色渐变 + 白纱叠加）
+    textFont: 'sans',
+    textWeight: 400,
     textItalic: false,
-    textSize: 36,
-    textLineHeight: 1.375,
+    textSize: 18.4,
+    textLineHeight: 1.8,
     textTracking: 0,
-    // 日期 font-sans text-[10px] opacity-60
+    // 日期与正文同族，小字
     dateFont: 'sans',
-    dateSize: 10,
+    dateSize: 12,
     dateColor: '#18181B',
     dateTracking: 0,
     dateUpper: false,

@@ -91,18 +91,14 @@ function tokenize(line) {
   });
 }
 
-// 文案用 \n 分段（段间是空行），逐行切。
-// 返回 [{ i, tokens }]，空行保留 —— 它是段落间距的来源。
-// 整段为空时回退到占位符。
+// 按换行分段：单个 \n 就是一次分段（对齐 flomo「换行下一段有间距」的行为），
+// 连续多个 \n 合并为一次分段，不会叠加出双倍段距。
+// 返回 [{ i, tokens }]；整段为空时回退到占位符。
 function buildLines(content) {
   var text = String(content == null ? '' : content).trim() || PLACEHOLDER;
-  var lines = text.split('\n').map(function (line, li) {
+  return text.split(/\n+/).map(function (line, li) {
     return { i: li, tokens: tokenize(line) };
   });
-  // 掐掉首尾空行，否则正文会整体偏移
-  while (lines.length && !lines[0].tokens.length) lines.shift();
-  while (lines.length && !lines[lines.length - 1].tokens.length) lines.pop();
-  return lines;
 }
 
 module.exports = {
