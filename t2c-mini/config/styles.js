@@ -13,7 +13,15 @@
 const stacks = {
   sans: 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
   serif: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-  mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+  mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  // 笑颜版式专用：中文走楷体（iOS Kaiti SC / Windows KaiTi），缺字回退衬线
+  kai: '"Kaiti SC", "STKaiti", "KaiTi", "DFKai-SB", "BiauKai", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+  // 笑颜版式大号日期：等高窄数字（lining figures）。Georgia 的老式数字高低不齐，
+  // 样图数字是齐 line 的，所以 Times 优先、Georgia 兜底。
+  dateSerif: '"Times New Roman", Times, Georgia, serif',
+  // 笑颜版式底部祝福：圆润手写体。Comic Sans 宽度最接近样图（225px@500），
+  // Segoe Script 偏窄；iOS 无这两者，回退 cursive（Snell Roundhand）。
+  script: '"Comic Sans MS", "Segoe Script", "Bradley Hand", cursive'
 };
 
 // 备注：Tailwind 的 w-32 = 128px（不是 32px），已在 decor 尺寸里体现。
@@ -140,6 +148,45 @@ const styles = [
     dateOpacity: 0.6,
     decor: 'veil', // 整幅 10% 白叠加
     markWhite: false
+  },
+  {
+    // 第六套：复刻手账波点卡片（暖米底 + 深棕楷体 + 手绘笑脸）。
+    // 中间正文不写死，仍由用户输入；英文词自动加方块高亮，
+    // 复刻原图「UI」背后的浅棕方块这一标志性处理。
+    id: 'dots',
+    name: '笑颜',
+    desc: '波点暖纸上的每日祝福',
+    bg: '#EEE7DD',
+    borderColor: '',
+    textColor: '#724908', // 深咖啡棕
+    // 正文 楷体系 / 33px / 行高 1.7
+    textFont: 'kai',
+    textWeight: 400,
+    textItalic: false,
+    textSize: 33,
+    textLineHeight: 1.7,
+    textTracking: 0.05,
+    // 日期：大号衬线 MM/DD（Times 窄数字 + scaleX 压缩，见 card.js），
+    // 右侧 15px 两小行（月份缩写 / 时分）
+    dateFont: 'dateSerif',
+    dateSize: 40,
+    dateColor: '#724908',
+    dateTracking: 0,
+    dateUpper: true,
+    dateOpacity: 1,
+    decor: 'dots', // 整幅波点底纹（SVG 瓦片平铺）
+    markWhite: false,
+    // —— 以下为本版式专属字段 ——
+    // 样图内边距不对称：上 66 / 下 63 / 左右 38（@500 实测，66 使日期 cap 顶落在 71）
+    padTop: 66,
+    padBottom: 63,
+    padX: 38,
+    headGap: 20, // 日期块与正文区的间隔（影响正文垂直居中位置）
+    dateSubSize: 15,
+    hlColor: '#EAD5B4', // 英文词方块高亮（原图实测色）
+    smileySize: 37, // 笑脸高度，宽 = 高 × 98/74（无边框画法，含两侧胡须线）
+    greetSize: 15,
+    greetText: 'Wishing you happiness every day'
   }
 ];
 

@@ -114,3 +114,61 @@
   border-radius: 999px;
   background-color: #00bc7d;
 }
+
+/* ---- 笑颜版式专属 ---- */
+
+/* 整幅波点底纹：渐变与平铺尺寸都在 card.js 里按 k 算好 */
+.decor-dots {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-repeat: repeat;
+  background-position: 0 0;
+}
+
+/* 头部：大号日期 + 两小行，两小行整体相对大字号垂直居中 */
+.head-diary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.date-big {
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.date-sub {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.date-sub-line {
+  line-height: 1;
+}
+
+/* 底部：左下手绘笑脸 + 手写祝福，垂直居中对齐 */
+.foot-diary {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.smiley {
+  flex-shrink: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.greet {
+  flex-shrink: 0;
+  white-space: nowrap;
+}

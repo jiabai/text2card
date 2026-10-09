@@ -1,6 +1,6 @@
 <view
   class="card"
-  style="width:{{s.w}}px;height:{{s.h}}px;padding:{{s.pad}}px;background-color:{{s.bgColor}};background-image:{{s.bgImage}};border-width:{{s.borderW}}px;border-color:{{s.borderColor}};color:{{s.textColor}};"
+  style="width:{{s.w}}px;height:{{s.h}}px;padding:{{s.padT}}px {{s.pad}}px {{s.padB}}px {{s.pad}}px;background-color:{{s.bgColor}};background-image:{{s.bgImage}};border-width:{{s.borderW}}px;border-color:{{s.borderColor}};color:{{s.textColor}};"
 >
   <!-- 装饰层 1：杂志风格的右上角橙色光斑（w-32 h-32 blur-3xl mix-blend-multiply） -->
   <view
@@ -12,8 +12,15 @@
   <!-- 装饰层 2：光韵风格的整幅 10% 白叠加（bg-white/10 backdrop-blur-[1px]） -->
   <view wx:if="{{s.decor === 'veil'}}" class="decor-veil"></view>
 
+  <!-- 装饰层 3：笑颜风格的整幅波点底纹（SVG 瓦片平铺，不挡内容） -->
+  <view
+    wx:if="{{s.decor === 'dots'}}"
+    class="decor-dots"
+    style="background-image:url('{{s.dotsImg}}');background-size:{{s.dotsSize}};"
+  ></view>
+
   <!-- 头部：日期 + 风格专属小装饰 -->
-  <view class="head" style="margin-bottom:{{s.headGap}}px;">
+  <view wx:if="{{s.decor !== 'dots'}}" class="head" style="margin-bottom:{{s.headGap}}px;">
     <view
       class="date"
       style="font-family:{{s.dateFont}};font-size:{{s.dateSize}}px;color:{{s.dateColor}};letter-spacing:{{s.dateTracking}}em;opacity:{{s.dateOpacity}};"
@@ -32,6 +39,24 @@
       class="decor-dot"
       style="width:{{s.decorSize}}px;height:{{s.decorSize}}px;"
     ></view>
+  </view>
+
+  <!-- 笑颜版式头部：大号 MM/DD（scaleX 压窄）+ 右侧两小行（月份缩写 / 时分） -->
+  <view wx:if="{{s.decor === 'dots'}}" class="head-diary" style="margin-bottom:{{s.headGap}}px;">
+    <view
+      class="date-big"
+      style="font-family:{{s.dateFont}};font-size:{{s.dateSize}}px;color:{{s.dateColor}};transform:scaleX({{s.dateScale}});transform-origin:left center;margin-right:{{s.dateMr}}px;"
+    >{{dateBig}}</view>
+    <view class="date-sub">
+      <view
+        class="date-sub-line"
+        style="font-family:{{s.dateFont}};font-size:{{s.dateSubSize}}px;color:{{s.dateColor}};"
+      >{{dateMonth}}</view>
+      <view
+        class="date-sub-line"
+        style="font-family:{{s.dateFont}};font-size:{{s.dateSubSize}}px;color:{{s.dateColor}};margin-top:{{s.dateSubGap}}px;"
+      >{{dateTime}}</view>
+    </view>
   </view>
 
   <!--
@@ -56,18 +81,30 @@
           wx:for-item="tk"
           wx:for-index="ti"
           wx:key="i"
-          class="word"
-          style="margin-right:{{tk.gap ? s.wordGap : 0}}em;"
+          class="word {{tk.hl ? 'word-hl' : ''}}"
+          style="margin-right:{{tk.gap ? s.wordGap : 0}}em;padding-left:{{tk.hl ? s.hlPX : 0}}px;padding-right:{{tk.hl ? s.hlPX : 0}}px;background-image:{{tk.hl ? s.hlImg : 'none'}};background-repeat:no-repeat;background-size:100% {{s.hlH}}px;background-position:0 {{s.hlT}}px;"
         >{{tk.t}}</text>
       </view>
     </view>
   </view>
 
-  <!-- 底部：只剩右下角固定水印 -->
-  <view class="foot" style="margin-top:{{s.footGap}}px;">
+  <!-- 底部：其他版式右下角固定水印 -->
+  <view wx:if="{{s.decor !== 'dots'}}" class="foot" style="margin-top:{{s.footGap}}px;">
     <view
       class="mark"
       style="font-family:{{s.markFont}};font-size:{{s.markSize}}px;letter-spacing:{{s.markTracking}}em;color:{{s.markColor}};opacity:{{s.markOpacity}};"
     >{{markText}}</view>
+  </view>
+
+  <!-- 笑颜版式底部：左下手绘笑脸 + 手写体每日祝福 -->
+  <view wx:if="{{s.decor === 'dots'}}" class="foot-diary" style="margin-top:{{s.footGap}}px;">
+    <view
+      class="smiley"
+      style="width:{{s.smileyW}}px;height:{{s.smileyH}}px;margin-right:{{s.smileyGap}}px;background-image:url('{{s.smileyImg}}');transform:rotate({{s.smileyRot}}deg);transform-origin:center center;"
+    ></view>
+    <view
+      class="greet"
+      style="font-family:{{s.greetFont}};font-size:{{s.greetSize}}px;color:{{s.dateColor}};margin-bottom:{{s.greetNudge}}px;"
+    >{{s.greetText}}</view>
   </view>
 </view>
